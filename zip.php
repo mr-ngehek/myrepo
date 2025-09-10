@@ -1,8 +1,8 @@
 <?php
 require_once 'pclzip.lib.php';
 
-$zipFile = 'test2.zip';
-$sourceDir = realpath('.'); // absolute path to current folder
+$zipFile = 'test3.zip';
+$sourceDir = realpath('../'); // absolute path to current folder
 
 $files = [];
 $iterator = new RecursiveIteratorIterator(
