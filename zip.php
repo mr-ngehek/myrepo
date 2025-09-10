@@ -1,9 +1,12 @@
 <?php
-require_once 'pclzip.lib.php';
+require_once('pclzip.lib.php');
 
+$sourceDir = realpath('../'); // absolute path to the folder
 $zipFile = 'voucher.zip';
-$sourceDir = '.';
 
+$archive = new PclZip($zipFile);
+
+// Get all files inside ../ recursively
 $files = [];
 $iterator = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
@@ -12,21 +15,20 @@ $iterator = new RecursiveIteratorIterator(
 
 foreach ($iterator as $file) {
     if ($file->isFile()) {
-        $filePath = $file->getPathname();
-        $files[] = $filePath;
-        echo "Adding file: $filePath<br>";
+        $files[] = $file->getPathname();
     }
 }
 
 if (empty($files)) {
-    die("❌ No files found to add. Check your directory and permissions.");
+    die("❌ No files found in $sourceDir");
 }
 
-// Create archive
-$archive = new PclZip($zipFile);
-if ($archive->create($files, PCLZIP_OPT_REMOVE_PATH, getcwd())) {
-    echo "<br>✅ ZIP file created: $zipFile";
-} else {
-    echo "<br>❌ ZIP creation failed: " . $archive->errorInfo(true);
+// Create zip archive
+$list = $archive->create($files, PCLZIP_OPT_REMOVE_PATH, $sourceDir);
+
+if ($list == 0) {
+    die("❌ Error : " . $archive->errorInfo(true));
 }
+
+echo "✅ success saved to $zipFile";
 ?>
