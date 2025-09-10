@@ -1,7 +1,7 @@
 <?php
 require_once 'pclzip.lib.php';
 
-$zipFile = 'voucher.zip';
+$zipFile = 'test2.zip';
 $sourceDir = realpath('.'); // absolute path to current folder
 
 $files = [];
